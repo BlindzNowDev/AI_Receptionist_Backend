@@ -1,14 +1,14 @@
 {
-  "name": "blindznow-ai-backend",
+  "name": "ai-receptionist-backend",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "axios": "^1.4.0",
     "express": "^4.18.2",
+    "axios": "^1.4.0",
     "openai": "^4.6.0"
-  },
-  "type": "module"
+  }
 }
