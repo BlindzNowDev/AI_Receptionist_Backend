@@ -1,6 +1,14 @@
-// ===== Twilio voice webhook (defensive: support multiple paths/methods) =====
+const express = require("express");
+const bodyParser = require("body-parser");
 const { twiml: { VoiceResponse } } = require("twilio");
 
+const app = express();
+app.use(bodyParser.urlencoded({ extended: false })); // Twilio posts form-encoded
+
+// Health check for browsers
+app.get("/", (req, res) => res.status(200).send("OK"));
+
+// ===== Twilio voice webhook (defensive: supports multiple paths/methods) =====
 function respondTwiML(req, res) {
   const vr = new VoiceResponse();
   const msg =
@@ -11,8 +19,11 @@ function respondTwiML(req, res) {
   res.type("text/xml").send(vr.toString());
 }
 
-app.post("/voice", respondTwiML); // preferred
-app.get("/voice", respondTwiML);  // allows quick browser test
-app.post("/", respondTwiML);      // if Twilio is still pointed at root
-// =========================================================================== 
+app.post("/voice", respondTwiML); // preferred by Twilio
+app.get("/voice", respondTwiML);  // handy for browser test
+app.post("/", respondTwiML);      // works even if Twilio still points to root
+// ===========================================================================
+
+const port = process.env.PORT || 10000;
+app.listen(port, () => console.log(`AI receptionist backend listening on ${port}`));
 
